@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extreme Ownership for MarTech teams</title>
+<style>
+:root{
+  --ink:#13211f; --muted:#5a6b68; --line:#e3ebe9;
+  --teal:#0f766e; --teal-d:#0b5a54; --teal-l:#14a89c; --orange:#e2570e; --gold:#e0a43c;
+  --bg:#f4f8f7; --card:#ffffff;
+  --radius:18px; --shadow:0 10px 30px rgba(15,40,37,.08); --shadow-sm:0 4px 14px rgba(15,40,37,.06);
+  --font:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1140px;margin:0 auto;padding:0 26px}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:rgba(10,25,23,.85);backdrop-filter:saturate(140%) blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.nav .brand{display:flex;flex-direction:column;line-height:1.1}
+.nav .brand strong{color:#fff;font-size:15px;font-weight:800}
+.nav .brand span{color:#9ec7c2;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+.nav .links{display:flex;gap:6px}
+.nav .links a{color:#cfe3e0;font-size:13.5px;font-weight:600;padding:8px 13px;border-radius:9px}
+.nav .links a:hover{background:rgba(255,255,255,.09);color:#fff}
+@media(max-width:760px){.nav .links a{display:none}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(1000px 400px at 12% -10%,rgba(20,168,156,.4),transparent 60%),linear-gradient(125deg,#0a1b19,#0e332e 60%,#123f38)}
+.hero .wrap{padding:66px 26px 74px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 16px}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange)}
+.hero h1{font-size:52px;line-height:1.03;margin:0 0 18px;font-weight:800;letter-spacing:-.02em;max-width:17ch}
+.hero p{font-size:18px;color:#cfe0dd;max-width:64ch;margin:0 0 12px}
+.hero .fine{font-size:13.5px;color:#8fb3ae;max-width:64ch}
+
+/* CREED BAND */
+.creed{background:linear-gradient(120deg,#0f766e,#14a89c);color:#fff}
+.creed .wrap{padding:34px 26px}
+.creed h2{font-size:26px;font-weight:800;margin:0 0 8px}
+.creed p{margin:0;font-size:16px;color:#e6fbf8;max-width:80ch}
+
+section{padding:52px 0}
+.sec-head{max-width:60ch;margin:0 0 26px}
+.sec-head .tag{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.sec-head h2{font-size:30px;font-weight:800;margin:8px 0 8px;letter-spacing:-.01em}
+.sec-head p{color:var(--muted);margin:0;font-size:15.5px}
+
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.how .c{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+.how .c .n{width:34px;height:34px;border-radius:10px;background:var(--teal);color:#fff;font-weight:800;display:grid;place-items:center;margin-bottom:12px}
+.how .c h3{margin:0 0 6px;font-size:16px}.how .c p{margin:0;color:var(--muted);font-size:14px}
+
+/* PART + CHAPTERS */
+.part{margin:38px 0 18px;display:flex;align-items:center;gap:14px}
+.part .pill{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--orange);padding:6px 12px;border-radius:999px}
+.part h2{font-size:23px;font-weight:800;margin:0}
+.part .rng{color:var(--muted);font-size:13px;font-weight:600}
+.chapters{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.chapter{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s}
+.chapter:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.chapter .top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.chapter .num{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--teal-l));color:#fff;font-weight:800;font-size:17px;display:grid;place-items:center;flex:none}
+.chapter h3{margin:0;font-size:18px;font-weight:800}
+.chapter .lbl{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin:12px 0 3px;display:block}
+.chapter p{margin:0;color:#374845;font-size:14.5px}
+.chapter .ex{background:#f0f7f6;border-left:3px solid var(--teal);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:14px;color:#294b47}
+
+/* LAB */
+.lab{background:linear-gradient(125deg,#0a1b19,#103b35);color:#fff;border-radius:24px;padding:8px 0 12px}
+.lab .inner{padding:34px 34px 40px}
+.lab .tag{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.lab h2{font-size:30px;font-weight:800;margin:8px 0 8px}
+.lab .sub{color:#bcd6d1;margin:0 0 26px;max-width:70ch}
+.tool{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:24px;margin-bottom:18px}
+.tool h3{margin:0 0 6px;font-size:19px}
+.tool .hint{color:#9ec2bc;font-size:13.5px;margin:0 0 16px}
+label{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ec2bc;margin:0 0 6px}
+select,textarea,input[type=text]{width:100%;background:#0c2723;border:1px solid rgba(255,255,255,.16);color:#eafaf7;border-radius:10px;padding:12px 14px;font-family:inherit;font-size:14.5px}
+select:focus,textarea:focus,input:focus{outline:2px solid var(--teal-l);border-color:transparent}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;background:var(--teal-l);color:#04211d;font-weight:800;font-size:14.5px;padding:12px 20px;border-radius:11px;cursor:pointer;transition:filter .15s,transform .1s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.ghost{background:rgba(255,255,255,.1);color:#eafaf7;border:1px solid rgba(255,255,255,.2)}
+.btn.orange{background:var(--orange);color:#fff}
+.out{background:#0c2723;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:18px;margin-top:16px}
+.out .k{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:inline-block;background:rgba(224,164,60,.14);padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.out h4{margin:0 0 8px;font-size:17px;color:#fff}
+.out p{margin:0;color:#cfe4e0;font-size:14.5px}
+.out pre{white-space:pre-wrap;font-family:'SFMono-Regular',Consolas,monospace;font-size:13px;color:#eafaf7;margin:0;line-height:1.5}
+.sliders{display:grid;gap:16px;margin:6px 0 4px}
+.srow{display:grid;grid-template-columns:1fr 160px 40px;align-items:center;gap:14px}
+.srow span{font-weight:700;font-size:14.5px;color:#eafaf7}
+input[type=range]{width:100%;accent-color:var(--teal-l)}
+.score{font-size:20px;font-weight:800;color:var(--gold)}
+.readout{margin-top:14px;font-size:16px;font-weight:700}
+.readout b{color:var(--gold)}
+.commits{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.commits li{background:#0c2723;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 14px;font-size:14px;display:flex;justify-content:space-between;gap:10px}
+.commits li button{background:none;border:none;color:#8fb3ae;cursor:pointer;font-size:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.25s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{background:#0a1b19;color:#9ec2bc;padding:32px 0;font-size:13px;margin-top:40px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media(max-width:820px){.how,.chapters,.grid2{grid-template-columns:1fr}.hero h1{font-size:36px}.srow{grid-template-columns:1fr 120px 34px}.lab .inner{padding:24px 20px 30px}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><strong>Extreme Ownership</strong><span>MarTech curriculum</span></a>
+    <div class="links">
+      <a href="#curriculum">Curriculum</a>
+      <a href="#part1">Part 1</a>
+      <a href="#part2">Part 2</a>
+      <a href="#part3">Part 3</a>
+      <a href="#lab">Practice lab</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow"><span class="dot"></span> MarTech Team Development</p>
+    <h1>Extreme Ownership: a martech curriculum</h1>
+    <p>A self-paced learning path inspired by the leadership principles popularized in <em>Extreme Ownership</em> by Jocko Willink and Leif Babin — translated into how a healthcare martech team actually operates across web, CRM, email, data, and reporting.</p>
+    <p class="fine">This is not a reproduction of the book. It walks the team through all twelve principles, chapter by chapter, in plain language — no prior reading required.</p>
+  </div>
+</header>
+
+<div class="creed">
+  <div class="wrap">
+    <h2>Own the mission. Own the gaps. Own the handoff.</h2>
+    <p>Extreme ownership means the team stops asking "who dropped this?" and starts asking "what did we miss, what will we change, and who owns the next action?"</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section id="curriculum">
+    <div class="sec-head">
+      <p class="tag">How to use this</p>
+      <h2>Twelve short chapters, three parts</h2>
+      <p>Each chapter gives you the core idea, what it looks like on our team, and one exercise you can finish in a few minutes. Then make it real in the practice lab at the end.</p>
+    </div>
+    <div class="how">
+      <div class="c"><div class="n">1</div><h3>The idea</h3><p>One principle per chapter, in plain language — no book required.</p></div>
+      <div class="c"><div class="n">2</div><h3>On our team</h3><p>How it shows up in web, CRM, email, data, and reporting.</p></div>
+      <div class="c"><div class="n">3</div><h3>The exercise</h3><p>A 5-minute action that makes the principle real — then capture it in the practice lab.</p></div>
+    </div>
+  </section>
+
+  <!-- PART 1 -->
+  <div id="part1" class="part"><span class="pill">Part 1</span><h2>Winning the war within</h2><span class="rng">Chapters 1–4</span></div>
+  <div class="chapters" id="ch-1-4"></div>
+
+  <!-- PART 2 -->
+  <div id="part2" class="part"><span class="pill">Part 2</span><h2>Laws of combat</h2><span class="rng">Chapters 5–8</span></div>
+  <div class="chapters" id="ch-5-8"></div>
+
+  <!-- PART 3 -->
+  <div id="part3" class="part"><span class="pill">Part 3</span><h2>Sustaining victory</h2><span class="rng">Chapters 9–12</span></div>
+  <div class="chapters" id="ch-9-12"></div>
+
+  <!-- LAB -->
+  <section id="lab">
+    <div class="lab">
+      <div class="inner">
+        <p class="tag">The ownership practice lab</p>
+        <h2>Make the principles real</h2>
+        <p class="sub">Practice on real martech situations, score your ownership readiness, capture commitments, and build a coaching prompt you can take into Claude or Copilot.</p>
+
+        <!-- Practice the principle -->
+        <div class="tool">
+          <h3>Practice the principle</h3>
+          <p class="hint">Choose a scenario and generate a discussion exercise for your team.</p>
+          <label for="ownership-scenario">Choose a scenario</label>
+          <select id="ownership-scenario"></select>
+          <div class="row"><button class="btn" id="ownership-generate" type="button">Create exercise</button></div>
+          <div class="out" id="exercise-out" hidden>
+            <span class="k">Discussion exercise</span>
+            <h4 id="exercise-title"></h4>
+            <p id="exercise-body"></p>
+          </div>
+        </div>
+
+        <!-- Readiness -->
+        <div class="tool">
+          <h3>Ownership readiness check</h3>
+          <p class="hint">Rate how clear ownership is on a current project. 1 = unclear, 5 = crystal clear.</p>
+          <div class="sliders">
+            <div class="srow"><span>Clarity of owner</span><input type="range" id="score-owner" min="1" max="5" value="3"><span class="score" id="v-owner">3</span></div>
+            <div class="srow"><span>Clarity of mission</span><input type="range" id="score-mission" min="1" max="5" value="3"><span class="score" id="v-mission">3</span></div>
+            <div class="srow"><span>Clarity of handoff</span><input type="range" id="score-handoff" min="1" max="5" value="3"><span class="score" id="v-handoff">3</span></div>
+          </div>
+          <div class="readout">Ownership readiness: <b id="readiness">3.0</b> / 5 — <span id="readiness-note"></span></div>
+        </div>
+
+        <div class="grid2">
+          <!-- Commitments -->
+          <div class="tool">
+            <h3>Ownership capstone</h3>
+            <p class="hint">Turn learning into action. Add commitments you'll own this week.</p>
+            <label for="commitment-text">Your commitment</label>
+            <input type="text" id="commitment-text" placeholder="e.g. I'll name a single owner on every launch brief.">
+            <div class="row"><button class="btn orange" id="save-commitment" type="button">Add commitment</button></div>
+            <ul class="commits" id="commit-list"></ul>
+          </div>
+
+          <!-- Coach -->
+          <div class="tool">
+            <h3>Talk it through with the Ownership Coach</h3>
+            <p class="hint">Describe a situation. We'll build a coaching prompt you can paste into Claude or Copilot.</p>
+            <label for="coach-input">Your situation</label>
+            <textarea id="coach-input" rows="4" placeholder="e.g. A report shipped with numbers stakeholders don't trust, and no one owned the fix."></textarea>
+            <div class="row">
+              <button class="btn" id="coach-build" type="button">Build coaching prompt</button>
+              <button class="btn ghost" id="coach-copy" type="button">Copy</button>
+            </div>
+            <div class="out" id="coach-out" hidden><pre id="coach-pre"></pre></div>
+          </div>
+        </div>
+
+        <!-- Ready-made prompts -->
+        <div class="tool">
+          <h3>Ready-made ownership prompts</h3>
+          <p class="hint">Copy these into your team ritual — after-action reviews and commander's intent.</p>
+          <div class="grid2">
+            <div class="out"><span class="k">After-action review</span><pre id="p-aar">Run an after-action review on [project].
+1. What was supposed to happen?
+2. What actually happened?
+3. What did we own too late?
+4. What one system or process change prevents a repeat?
+5. Who owns that change, by when?</pre><div class="row"><button class="btn ghost" data-copy="p-aar" type="button">Copy</button></div></div>
+            <div class="out"><span class="k">Commander's intent</span><pre id="p-intent">Write the commander's intent for [initiative]:
+- The mission in one sentence
+- Why it matters (the "why")
+- The end state that means "done"
+- The boundaries owners can act within without asking</pre><div class="row"><button class="btn ghost" data-copy="p-intent" type="button">Copy</button></div></div>
+          </div>
+        </div>
+
+        <p class="hint" style="margin-top:8px">Make it a ritual: run one exercise at your weekly standup, capture one commitment, and review readiness monthly.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Internal team development · Inspired by <em>Extreme Ownership</em> (Willink &amp; Babin). Not affiliated with or endorsed by the authors.</span>
+    <span>MarTech Team Enablement</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Copied</div>
+
+<script>
+(function(){
+  "use strict";
+  // ---------- CURRICULUM DATA ----------
+  var CH = [
+    ["Extreme Ownership","Leaders own everything in their world — there is no one else to blame.","When a launch slips, ask “what could I have done differently?” before asking who dropped it.","Take one recent miss and write the single thing you could have owned earlier."],
+    ["No Bad Teams, Only Bad Leaders","There are no bad teams, only bad leaders. The standard you walk past is the standard you accept.","If QA keeps slipping, fix the standard and the process — not the person.","Name one standard we’ve been walking past, and write how you’d reset it."],
+    ["Believe","The team has to believe in the mission; the leader must understand and convey the “why.”","If people don’t buy into a campaign or a tool, surface the why — or push up the chain to get it.","Write the “why” behind a current project in one sentence you’d say to a skeptic."],
+    ["Check the Ego","Ego clouds judgment. Own mistakes, stay humble, and keep the mission first.","Accept the dashboard critique, fix the numbers, and skip the defense.","Recall a time ego slowed a fix, and note what you’d do differently now."],
+    ["Cover and Move","Teams and functions support each other toward one goal. No silos.","Web, CRM, email, and data cover each other on a launch instead of optimizing their own lane.","Name one handoff this week where “cover and move” would prevent a gap."],
+    ["Simple","Keep plans and communication simple so everyone understands and can execute.","A brief anyone can act on beats a clever one only you understand.","Take one plan and cut it to the fewest steps that still work."],
+    ["Prioritize and Execute","When it’s overwhelming: relax, look around, make a call. Do the highest priority first.","When five things are on fire, pick the one that unblocks the most — and say what you’re not doing.","List today’s fires, circle the one to execute first, and write why."],
+    ["Decentralized Command","People closest to the work decide — within clear intent and boundaries.","Give owners the intent and guardrails, then let them act without approving every step.","Pick one decision you can push down; write the intent plus the guardrails."],
+    ["Plan","Plan for contingencies, keep the plan simple, brief it, and debrief after.","Before a launch, name what could go wrong and who owns each risk.","For your next launch, write the top three risks and their owners."],
+    ["Leading Up and Down the Chain of Command","Own communication in both directions. If leadership lacks context, that’s yours to fix.","If a stakeholder doesn’t trust the numbers, brief them early; if your team lacks the why, go get it.","Identify one up-the-chain gap and write the message that closes it."],
+    ["Decisiveness Amid Uncertainty","Make the best decision you can with the information you have. A good call now beats a perfect one too late.","Ship the defensible call, label the assumptions, and adjust as you learn.","Name a decision you’re stalling on, make the call, and note the assumption to verify."],
+    ["Discipline Equals Freedom","Disciplined standards and habits create the freedom to move fast.","Consistent naming, QA, and handoff rituals let us launch faster with fewer fires.","Pick one daily or weekly discipline to commit to — then add it in the practice lab."]
+  ];
+  function chapterCard(i){
+    var c=CH[i], n=i+1;
+    var d=document.createElement('article'); d.className='chapter';
+    d.innerHTML='<div class="top"><div class="num">'+n+'</div><h3>'+c[0]+'</h3></div>'+
+      '<span class="lbl">The idea</span><p>'+c[1]+'</p>'+
+      '<span class="lbl">On our team</span><p>'+c[2]+'</p>'+
+      '<div class="ex"><strong>5-minute exercise:</strong> '+c[3]+'</div>';
+    return d;
+  }
+  function fill(id,from,to){var el=document.getElementById(id); if(!el) return; for(var i=from;i<=to;i++) el.appendChild(chapterCard(i));}
+  fill('ch-1-4',0,3); fill('ch-5-8',4,7); fill('ch-9-12',8,11);
+
+  // ---------- TOAST ----------
+  var toast=document.getElementById('toast');
+  function showToast(msg){ if(!toast) return; toast.textContent=msg||'Copied'; toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');},1400); }
+  function copyText(t){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){showToast('Copied');}); } else { showToast('Copy not available'); } }
+
+  // ---------- PRACTICE THE PRINCIPLE ----------
+  var SCENARIOS = [
+    ["A campaign launch has missing UTMs and unclear final approval.","Ownership broke at the finish line. Trace who was supposed to set UTMs and who gave final approval, and where the handoff silently dropped."],
+    ["A Builder.io landing page looks ready, but accessibility and analytics were not verified.","“Looks done” isn’t “is done.” Define what verified means, and who owns the accessibility and analytics check before go-live."],
+    ["A Salesforce app request is “done,” but users say the workflow doesn’t match reality.","Done for the builder wasn’t done for the user. Look at how requirements and validation were owned end to end."],
+    ["A Marketing Cloud journey is delayed because segmentation, content, and QA owners were unclear.","Three owners, no clear lead. Decide who owns the mission for this journey and who covers each handoff."],
+    ["A dashboard is technically correct, but stakeholders don’t trust the numbers.","Correct isn’t the same as trusted. Own the communication: who briefs stakeholders and reconciles the definition of each metric?"],
+    ["A physician relations report raises follow-up questions that weren’t captured in the original ask.","The ask was under-scoped. Look at how requirements were clarified up front and who owns closing the loop."]
+  ];
+  var ASK='Ask your team: What did we own too late? What should have been clarified earlier? Who owns the next action? And what one system or process change prevents this from repeating?';
+  var sel=document.getElementById('ownership-scenario');
+  if(sel){ SCENARIOS.forEach(function(s,i){ var o=document.createElement('option'); o.value=String(i); o.textContent=s[0]; sel.appendChild(o); }); }
+  var genBtn=document.getElementById('ownership-generate');
+  if(genBtn && sel){
+    genBtn.addEventListener('click',function(){
+      var s=SCENARIOS[sel.selectedIndex]||SCENARIOS[0];
+      var out=document.getElementById('exercise-out');
+      var t=document.getElementById('exercise-title');
+      var b=document.getElementById('exercise-body');
+      if(t) t.textContent=s[0];
+      if(b) b.textContent=s[1]+' '+ASK;
+      if(out) out.hidden=false;
+    });
+  }
+
+  // ---------- READINESS ----------
+  function clampNote(v){ if(v>=4.3) return 'strong ownership'; if(v>=3.3) return 'solid, with gaps to close'; if(v>=2.3) return 'shaky — clarify owners now'; return 'at risk — stop and align'; }
+  var ids=['owner','mission','handoff'];
+  function updateReadiness(){
+    var total=0,ok=true;
+    ids.forEach(function(k){
+      var r=document.getElementById('score-'+k), v=document.getElementById('v-'+k);
+      if(!r){ok=false;return;}
+      if(v) v.textContent=r.value;
+      total+=parseInt(r.value,10);
+    });
+    if(!ok) return;
+    var avg=total/ids.length;
+    var out=document.getElementById('readiness'); if(out) out.textContent=avg.toFixed(1);
+    var note=document.getElementById('readiness-note'); if(note) note.textContent=clampNote(avg);
+  }
+  ids.forEach(function(k){ var r=document.getElementById('score-'+k); if(r) r.addEventListener('input',updateReadiness); });
+  updateReadiness();
+
+  // ---------- COMMITMENTS ----------
+  var KEY='eo_commitments';
+  function loadCommits(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+  function saveCommits(a){ try{ localStorage.setItem(KEY,JSON.stringify(a)); }catch(e){} }
+  function renderCommits(){
+    var list=document.getElementById('commit-list'); if(!list) return;
+    var a=loadCommits(); list.innerHTML='';
+    a.forEach(function(txt,i){
+      var li=document.createElement('li');
+      var span=document.createElement('span'); span.textContent=txt;
+      var x=document.createElement('button'); x.type='button'; x.textContent='×'; x.setAttribute('aria-label','Remove');
+      x.addEventListener('click',function(){ var arr=loadCommits(); arr.splice(i,1); saveCommits(arr); renderCommits(); });
+      li.appendChild(span); li.appendChild(x); list.appendChild(li);
+    });
+  }
+  var saveBtn=document.getElementById('save-commitment');
+  var cInput=document.getElementById('commitment-text');
+  if(saveBtn && cInput){
+    saveBtn.addEventListener('click',function(){
+      var t=cInput.value.trim(); if(!t) return;
+      var a=loadCommits(); a.push(t); saveCommits(a); cInput.value=''; renderCommits();
+    });
+    cInput.addEventListener('keydown',function(e){ if(e.key==='Enter') saveBtn.click(); });
+  }
+  renderCommits();
+
+  // ---------- COACH ----------
+  function buildCoachPrompt(sit){
+    return 'You are an Extreme Ownership coach for a healthcare marketing-technology team.\n\n'+
+      'Situation:\n'+(sit||'[describe the situation]')+'\n\n'+
+      'Coach me using extreme ownership. Please:\n'+
+      '1. Reflect back what happened without blame.\n'+
+      '2. Name where ownership broke down (owner, mission, or handoff).\n'+
+      '3. Ask me 3 questions that help me own my part.\n'+
+      '4. Suggest one system or process change that prevents a repeat.\n'+
+      '5. End with a single commitment I can make this week.';
+  }
+  var coachBuild=document.getElementById('coach-build');
+  var coachInput=document.getElementById('coach-input');
+  var coachOut=document.getElementById('coach-out');
+  var coachPre=document.getElementById('coach-pre');
+  if(coachBuild && coachInput){
+    coachBuild.addEventListener('click',function(){
+      var p=buildCoachPrompt(coachInput.value.trim());
+      if(coachPre) coachPre.textContent=p;
+      if(coachOut) coachOut.hidden=false;
+    });
+  }
+  var coachCopy=document.getElementById('coach-copy');
+  if(coachCopy){
+    coachCopy.addEventListener('click',function(){
+      var p=(coachPre&&coachPre.textContent)?coachPre.textContent:buildCoachPrompt(coachInput?coachInput.value.trim():'');
+      copyText(p);
+    });
+  }
+
+  // ---------- READY-MADE PROMPT COPY BUTTONS ----------
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var el=document.getElementById(btn.getAttribute('data-copy'));
+      if(el) copyText(el.textContent);
+    });
+  });
+})();
+</script>
+</body>
+</html>
