@@ -79,7 +79,7 @@ section{padding:52px 0}
 .tool h3{margin:0 0 6px;font-size:19px}
 .tool .hint{color:#9ec2bc;font-size:13.5px;margin:0 0 16px}
 label{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ec2bc;margin:0 0 6px}
-select,textarea,input[type=text]{width:100%;background:#0c2723;border:1px solid rgba(255,255,255,.16);color:#eafaf7;border-radius:10px;padding:12px 14px;font-family:inherit;font-size:14.5px}
+select,textarea,input[type=text],input[type=email]{width:100%;background:#0c2723;border:1px solid rgba(255,255,255,.16);color:#eafaf7;border-radius:10px;padding:12px 14px;font-family:inherit;font-size:14.5px}
 select:focus,textarea:focus,input:focus{outline:2px solid var(--teal-l);border-color:transparent}
 .btn{display:inline-flex;align-items:center;gap:8px;border:none;background:var(--teal-l);color:#04211d;font-weight:800;font-size:14.5px;padding:12px 20px;border-radius:11px;cursor:pointer;transition:filter .15s,transform .1s}
 .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
@@ -175,6 +175,28 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <p class="tag">The ownership practice lab</p>
         <h2>Make the principles real</h2>
         <p class="sub">Practice on real martech situations, score your ownership readiness, capture commitments, and build a coaching prompt you can take into Claude or Copilot.</p>
+
+        <!-- Enroll & certificate -->
+        <div class="tool">
+          <h3>Enroll &amp; earn your certificate</h3>
+          <p class="hint">Register to join the Extreme Ownership program. When you've worked through the principles, generate your certificate. Your enrollment and certificate are recorded for the team enablement dashboard.</p>
+          <label for="eo-name">Your name</label>
+          <input type="text" id="eo-name" placeholder="Your name">
+          <label for="eo-email" style="margin-top:12px">Your email</label>
+          <input type="email" id="eo-email" placeholder="you@orlandohealth.com">
+          <div class="row"><button class="btn orange" id="eo-enroll" type="button">Enroll</button></div>
+          <div class="out" id="eo-enroll-out" hidden><p id="eo-enroll-msg"></p></div>
+
+          <div id="eo-cert-block" hidden style="margin-top:18px">
+            <div class="row"><button class="btn" id="eo-cert-make" type="button">Generate my certificate</button></div>
+            <div class="out" id="eo-cert-out" hidden>
+              <span class="k">Certificate of completion</span>
+              <h4>Extreme Ownership &middot; MarTech</h4>
+              <p>Awarded to <b id="eo-cert-name"></b> on <span id="eo-cert-date"></span> for completing the Extreme Ownership curriculum.</p>
+              <div class="row"><button class="btn ghost" id="eo-cert-print" type="button">Print</button></div>
+            </div>
+          </div>
+        </div>
 
         <!-- Practice the principle -->
         <div class="tool">
@@ -404,6 +426,49 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       if(el) copyText(el.textContent);
     });
   });
+
+  // ---------- ENROLL + CERTIFICATE (feeds the team enablement dashboard) ----------
+  var API='https://martech-ai-enablement.vercel.app/api/track';
+  var EOID='eo_user';
+  function eoGet(){ try{ return JSON.parse(localStorage.getItem(EOID)||'{}'); }catch(e){ return {}; } }
+  function eoSet(o){ try{ localStorage.setItem(EOID,JSON.stringify(o)); }catch(e){} }
+  function eoPost(p){ try{ fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); }catch(e){} }
+  function validEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+  function eoShow(id){ var e=document.getElementById(id); if(e) e.hidden=false; }
+  var eoName=document.getElementById('eo-name');
+  var eoEmail=document.getElementById('eo-email');
+  var eoEnroll=document.getElementById('eo-enroll');
+  (function(){ var u=eoGet(); if(u.email){ if(eoName) eoName.value=u.name||''; if(eoEmail) eoEmail.value=u.email; eoShow('eo-cert-block'); } })();
+  if(eoEnroll){
+    eoEnroll.addEventListener('click',function(){
+      var name=((eoName&&eoName.value)||'').trim();
+      var email=((eoEmail&&eoEmail.value)||'').trim();
+      var msg=document.getElementById('eo-enroll-msg');
+      if(!validEmail(email)){
+        if(eoEmail){ eoEmail.style.outline='2px solid #c0392b'; eoEmail.focus(); }
+        if(msg) msg.textContent='Please enter a valid email to enroll.';
+        eoShow('eo-enroll-out'); return;
+      }
+      if(eoEmail) eoEmail.style.outline='';
+      eoSet({name:name,email:email});
+      eoPost({type:'enroll',program:'Extreme Ownership',track:'Extreme Ownership',name:name,email:email});
+      if(msg) msg.textContent="You're enrolled, "+(name||email)+". Work through the principles, then generate your certificate below.";
+      eoShow('eo-enroll-out'); eoShow('eo-cert-block');
+    });
+  }
+  var eoCertMake=document.getElementById('eo-cert-make');
+  if(eoCertMake){
+    eoCertMake.addEventListener('click',function(){
+      var u=eoGet(); var name=u.name||''; var email=u.email||'';
+      if(!email) return;
+      var nm=document.getElementById('eo-cert-name'); if(nm) nm.textContent=name||email;
+      var dt=document.getElementById('eo-cert-date'); if(dt) dt.textContent=new Date().toLocaleDateString();
+      eoShow('eo-cert-out');
+      eoPost({type:'certificate',program:'Extreme Ownership',name:name,email:email});
+    });
+  }
+  var eoCertPrint=document.getElementById('eo-cert-print');
+  if(eoCertPrint){ eoCertPrint.addEventListener('click',function(){ window.print(); }); }
 })();
 </script>
 </body>
